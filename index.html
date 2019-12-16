@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document</title>
+  <link rel="stylesheet" href="node_modules/minirefresh/dist/debug/minirefresh.css" />
+  <script type="text/javascript" src="node_modules/minirefresh/dist/debug/minirefresh.js"></script>
+  <script type="text/javascript" src="node_modules/minirefresh/examples/common/common.js"></script>
+  <style type="text/css">
+    html,body,header,div,main,p,span,ul,li{ margin: 0; padding: 0; }
+    #refreshContainer li{ background-color: #eee; margin-bottom: 1px; padding: 20px 10px; }
+    .refreshText{ position: absolute; width: 100%; line-height: 50px; text-align: center; left: 0; top: 0; }
+  </style>
+</head>
+<body>
+<div id="minirefresh" class="minirefresh-wrap">
+  <div class="minirefresh-scroll">
+    <p class="refreshText"></p>
+    <ul id="refreshContainer">
+      <li>111</li>
+      <li>222</li>
+      <li>333</li>
+      <li>444</li>
+      <li>555</li>
+      <li>111</li>
+      <li>222</li>
+      <li>333</li>
+      <li>444</li>
+      <li>555</li>
+      <li>111</li>
+      <li>222</li>
+      <li>333</li>
+      <li>444</li>
+      <li>555</li>
+    </ul>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+
+
+  var appendTestData = Common.appendTestData,
+    // 记录一个最新
+    maxDataSize = 30,
+    listDom = document.querySelector('#refreshContainer'),
+    requestDelayTime = 600;
+  // 引入任何一个主题后，都会有一个 MiniRefresh 全局变量
+  var miniRefresh = new MiniRefresh({
+    container: '#minirefresh',
+    down: {
+      callback: function() {
+        setTimeout(function() {
+          // 每次下拉刷新后，上拉的状态会被自动重置
+          appendTestData(listDom, 10, true);
+          miniRefresh.endDownLoading(true);
+        }, requestDelayTime);
+      }
+    },
+    up: {
+      isAuto: true,
+      callback: function() {
+        setTimeout(function() {
+          appendTestData(listDom, 10);
+          miniRefresh.endUpLoading(listDom.children.length >= maxDataSize ? true : false);
+        }, requestDelayTime);
+      }
+    }
+  });
+</script>
+</body>
+</html>
